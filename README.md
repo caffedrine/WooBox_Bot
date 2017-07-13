@@ -5,6 +5,7 @@ Just another C++ app which you can use to send a bunch of likes to pictures publ
 Notes:
   * It require LibCURL and boost;
   * Adjust MAX number of threads for speed;
+  * If you want to get rid of dependencies, implement boost string operations I made and use the other C++ header only class I made. It is on github under the name HttpWebRequestsCPP
   
 # How to use 
 
