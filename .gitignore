@@ -77,3 +77,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+#Codeblocks settings
+*.cbp
+*.depend
+*.layout
+bin
+bin/
+objobj/
