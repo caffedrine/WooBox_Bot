@@ -12,6 +12,7 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
+//Adding some fake refferers to make request more legit
 std::string refferers[] =
 {
 "http://facebook.com",
@@ -45,6 +46,7 @@ std::string refferers[] =
 "http://woobox.com/uu9qfg/gallery?web=1"
 };
 
+//Fake user agents
 std::string userAgents[] =
 {
 "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36",
@@ -164,27 +166,16 @@ bool HTTPDownloader::download(std::string proxy, std::string proxyType)
     curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 10000);
     curl_easy_setopt(curl, CURLOPT_REFERER, &refferer);
     curl_easy_setopt(curl, CURLOPT_USERAGENT, &userAgent);
-
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1); //Prevent "longjmp causes uninitialized stack frame" bug
+    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 
-    //First
-    //curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "id=19248849&signed_request=false");
-
-    //Second
-    //curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "id=19278615&signed_request=false");
-
-    //Third
-    //curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "id=19284123&signed_request=false");
-
-    //Refflection ot the moon
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "id=19333019&signed_request=false");
+    //Set the id of your picture here - in the given format
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "id=12332001&signed_request=false");
 
     std::stringstream out;
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
-
     curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
 
     if(proxyType == "socks4") curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS4 );
@@ -193,16 +184,11 @@ bool HTTPDownloader::download(std::string proxy, std::string proxyType)
     else if(proxyType == "socks4a") curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS4A );
     else if(proxyType == "http10") curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP_1_0 );
 
-    /* Perform the request, res will get the return code */
     CURLcode res = curl_easy_perform(curl);
-
-    /* Check for errors */
 
     if (res != CURLE_OK)
     {
-        //fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
         return false;
     }
-    //*/
     return true;
 }

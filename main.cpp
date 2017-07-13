@@ -18,11 +18,13 @@
 
 using namespace std;
 
+//Depends on computer and network speed
 const int num_threads = 400;
 
-
+//Store socks in memory
 vector<string> socks4List;
 
+//Load proxy list from file to array()
 bool loadProxyList(string file)
 {
     socks4List.clear();
@@ -41,6 +43,8 @@ bool loadProxyList(string file)
         return false;
 }
 
+//Requests are send as POST and contain picture ID. 
+//To set picture id edit HTTPDownloader.cpp
 std::string sendPost(string proxy)
 {
     HTTPDownloader dl;
@@ -74,20 +78,24 @@ std::string sendPost(string proxy)
 
 int main(int argc, char* argv[])
 {
+	//try to load proxy list
     if(!loadProxyList("proxy.txt"))
     {
         cout << "No proxy list loaded!";
         return -1;
     }
 
+	//threads stuff
     thread_pool pool(num_threads);
     list<future<string>> results;
 
+	//The number of requests which will be send is the number of proxies
     int from = 0;
     int to = socks4List.size() - 1;
 
     cout << "Starting from "<<from<<" to "<<to<<endl;
 
+	//Sending requests
     for(int i=from; i<=to; i++)
     {
         string proxy = socks4List[i];
@@ -103,7 +111,8 @@ int main(int argc, char* argv[])
             getchar();
         }
     }
-
+	
+	//Reading responses
     cout <<"Sending requests async..."<<endl;
     for(auto i=results.begin(); i != results.end(); i++)
     {
@@ -127,5 +136,3 @@ int main(int argc, char* argv[])
     system("pause");
     return 0;
 }
-
-
